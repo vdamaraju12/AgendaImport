@@ -24,6 +24,7 @@ def main():
     sh = book.sheet_by_index(0)
     db = db_table.create_table()
     
+    
     print(sh.col_values(TITLE_ID, ROW_START))
 
 
