@@ -47,9 +47,6 @@ def main():
     
     sid = 1
     row = ROW_START
-    # desc = sh.cell_value(18, DESCRIPTION_COL)
-    # desc = desc.replace("'", "''")
-    # print(desc)
     while row < tot_rows:
         #constants
         date = sh.cell_value(row, DATE_COL)
@@ -105,5 +102,4 @@ def main():
             row += 1
     print(agenda.select(['parent_id'], {'session_type': "Sub"}))
     
-
 main()
