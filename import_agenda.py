@@ -22,8 +22,7 @@ def main():
 
 
     #open file
-    filename = sys.argv[1]
-    filename = 'agenda.xls'
+    filename = str(sys.argv[1])
     if(filename[-3:] != "xls"):
         print("error: not an xls file.")
         return
@@ -100,6 +99,6 @@ def main():
                         "speaker": speaker})
             sid += 1
             row += 1
-    print(agenda.select(['parent_id'], {'session_type': "Sub"}))
+    #print(agenda.select(['parent_id'], {'session_type': "Sub"}))
     
 main()
