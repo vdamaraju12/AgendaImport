@@ -64,6 +64,7 @@ class db_table:
     #
     # \param columns  array<string>         columns to be fetched. if empty, will query all the columns
     # \param where    dict<string, string>  where filters to be applied. only combine them using AND and only check for strict equality
+    # \param like     array<string>         will input a LIKE comparison instead of =.
     #
     # \return [ { col1: val1, col2: val2, col3: val3 } ]
     #
@@ -71,7 +72,7 @@ class db_table:
     #         table.select()
     #         table.select(where={ "name": "John" })
     #
-    def select(self, columns = [], where = {}):
+    def select(self, columns = [], where = {}, like = []):
         # by default, query all columns
         if not columns:
             columns = [ k for k in self.schema ]
@@ -81,8 +82,12 @@ class db_table:
         query                = "SELECT %s FROM %s" % (columns_query_string, self.name)
         # build where query string
         if where:
-            where_query_string = [ "%s = '%s'" % (k,v) for k,v in where.items() ]
-            query             += " WHERE " + ' AND '.join(where_query_string)
+            if len(like) > 0:
+                where_query_string = [ "%s LIKE '%s'" % (k,v) for k,v in where.items() ]
+                query             += " WHERE " + ' AND '.join(where_query_string)
+            else:
+                where_query_string = [ "%s = '%s'" % (k,v) for k,v in where.items() ]
+                query             += " WHERE " + ' AND '.join(where_query_string)
         
         result = []
         # SELECT id, name FROM users [ WHERE id=42 AND name=John ]
