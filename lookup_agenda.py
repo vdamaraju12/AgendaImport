@@ -19,7 +19,7 @@ def main():
                                  "speaker": "text"})
     
     #get/verify command line arguments
-    column_requested = str(sys.argv[1])
+    column_requested = str(sys.argv[1]).lower().strip()
     if column_requested not in VALID_COLUMN:
         print("Invalid column resquested.")
         return
@@ -29,26 +29,39 @@ def main():
     value_requested = str(sys.argv[2])
     for i in range(3, len(sys.argv)):
         value_requested += " " + str(sys.argv[i])
+    value_requested = value_requested.strip()
     
     
     #'speaker' argument special request
     if column_requested == "speaker":
-        results = agenda.select(["id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
+        results = agenda.select(["id", "parent_id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
                                 {column_requested: '%{}%'.format(value_requested)}, ["LIKE"])
     else:
-        results = agenda.select(["id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
+        results = agenda.select(["id", "parent_id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
                                 {column_requested: value_requested}, [])
 
-    #finding subsessions
-    subsessions = []
+    #finding parent of subsessions matched
+    parents = []
     ids = []
+    parent_ids = []
     for result in results:
         ids.append(result["id"])
+        parent_ids.append(result["parent_id"])
 
+    for pid in parent_ids:
+        if pid in ids or pid == -1:         #preventing duplicates and invalid parent_ids
+            continue
+        parents += agenda.select(["id", "parent_id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
+                                    {'id': pid})
+
+    #finding subsessions of parent matched
+    subsessions = []
     for id in ids:
-        subsessions += agenda.select(["id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
+        subsessions += agenda.select(["id", "parent_id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
                                     {'parent_id': id})
-    results += subsessions
+    
+    #adding to results and sorting by id
+    results += parents + subsessions
     results = sorted(results, key = lambda d: d["id"])
 
     #printing out all results

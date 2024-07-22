@@ -94,11 +94,11 @@ def main():
                         "date": date,
                         "time_start" : time_start,
                         "time_end": time_end,
-                        "session_type": session_type,
-                        "title": title,
-                        "location": location,
-                        "description": description,
-                        "speaker": speaker})
+                        "session_type": session_type.strip(),
+                        "title": title.strip(),
+                        "location": location.strip(),
+                        "description": description.strip(),
+                        "speaker": speaker.strip()})
             sid += 1
             row += 1
     
