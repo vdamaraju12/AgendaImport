@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import xlrd
 from db_table import db_table

@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
+
 import sys
 from db_table import db_table
-import sqlite3
 
 VALID_COLUMN = ["date", "time_start", "time_end", "title", "location", "description", "speaker"]
 
