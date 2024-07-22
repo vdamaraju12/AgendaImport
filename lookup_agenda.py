@@ -38,6 +38,7 @@ def main():
     else:
         results = agenda.select(["id", "date", "time_start", "time_end", "title", "location", "description", "speaker"],
                                 {column_requested: value_requested}, [])
+
     #finding subsessions
     subsessions = []
     ids = []

@@ -101,6 +101,5 @@ def main():
                         "speaker": speaker})
             sid += 1
             row += 1
-    #print(agenda.select(['parent_id'], {'session_type': "Sub"}))
     
 main()
